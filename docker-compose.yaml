@@ -1,0 +1,22 @@
+version: '3.1'
+services:
+  
+  movies-db:
+    build: movies-db/
+    restart: always
+    environment:
+      POSTGRES_USER: movies
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: movies
+    ports:
+      - "5432:5432"
+  
+  movies-audit:
+    build: movies-audit/
+    depends_on:
+      - movies-db
+    environment:
+      DB_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./:/movies-audit-result/
+
